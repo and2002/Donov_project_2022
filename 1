@@ -1,0 +1,84 @@
+const int rasx = 30;
+void reset()
+{
+    digitalWrite(3,0);
+    delayMicroseconds(1);
+    digitalWrite(3,1);
+    delayMicroseconds(1);
+    digitalWrite(3,0);
+}
+void num(int i)
+ {
+   reset();
+   for (int r = 0; r < i; r++)
+   {
+    digitalWrite(2,0);
+    delayMicroseconds(1);
+    digitalWrite(2,1);
+    delayMicroseconds(1);
+   }
+ }
+
+void select(int i)
+{
+  if ( i == 1) {digitalWrite(9,1);digitalWrite(10,1);digitalWrite(11,1);digitalWrite(12,0);}
+  if ( i == 2) {digitalWrite(9,1);digitalWrite(10,1);digitalWrite(11,0);digitalWrite(12,1);}
+  if ( i == 3) {digitalWrite(9,1);digitalWrite(10,0);digitalWrite(11,1);digitalWrite(12,1);}
+  if ( i == 4) {digitalWrite(9,0);digitalWrite(10,1);digitalWrite(11,1);digitalWrite(12,1);}
+}
+void prsim(int q, int p)
+ {
+    reset;
+    num(q);
+    select(p);
+    delay(2);
+   }
+
+void WR(int s)
+{
+  for (int i = 1; i < 5; i++)
+  {
+  prsim( s % 10, i);
+  s = s / 10;
+  }
+  
+}
+void setup() {
+  pinMode(9,OUTPUT); // 1
+  pinMode(10,OUTPUT); // 2
+  pinMode(11,OUTPUT); // 3
+  pinMode(12,OUTPUT); // 4
+  pinMode(3,OUTPUT); // reset
+  pinMode(2,OUTPUT); // count
+
+   num (4);
+   select(4);
+}  
+
+void grow(int u)
+{ 
+  int i = 0;
+  while ( u < 0)
+  {
+    WR (i);
+    u = u - rasx;
+    i = i + rasx;
+    delay (100);
+  }
+}
+ 
+void loop() 
+{ 
+  int w = 5000;
+ while ( w > 0)
+ {
+  int e  = millis ();
+  int t = millis ();
+  while ( t-e < 200)
+  {
+    WR (w);
+    t = millis ();
+  }
+  w = w - rasx;
+ }
+}
